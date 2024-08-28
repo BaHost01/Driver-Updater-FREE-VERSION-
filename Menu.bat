@@ -1,18 +1,18 @@
 @echo off
 setlocal EnableDelayedExpansion
 
-:: Variáveis do arquivo JSON
+:: Variables
 set "config_file=%~dp0config.json"
 set "log_file=%~dp0update_log.txt"
-set "latest_version_file=%~dp0latest_version.json"
-set "update_script_file=%~dp0update_script.bat"
+set "latest_release_file=%~dp0latest_release.json"
+set "downloads_dir=%~dp0downloads"
 
-:: Função de log
+:: Function to log messages
 :log
 echo [%date% %time%] %* >> "%log_file%"
 goto :eof
 
-:: Função para ler valor do JSON
+:: Function to read a value from a JSON file
 :get_json_value
 set "json_file=%1"
 set "key=%2"
@@ -20,67 +20,68 @@ for /f "tokens=2 delims=:," %%A in ('findstr /i /c:"%key%" "%json_file%"') do se
 set "value=%value:~1,-1%"
 goto :eof
 
-:: Obter configurações do arquivo JSON
+:: Read configuration values from the JSON file
 call :get_json_value "%config_file%" "update_check_url"
 set "update_check_url=%value%"
-
-call :get_json_value "%config_file%" "download_url"
-set "download_url=%value%"
 
 call :get_json_value "%config_file%" "current_version"
 set "current_version=%value%"
 
-:: Função para verificar se há uma atualização disponível
+:: Check for updates by getting the latest release from GitHub
 :check_for_updates
-echo Verificando se há atualizações disponíveis... >> "%log_file%"
+echo Checking for updates... >> "%log_file%"
 
-:: Baixar a versão mais recente usando a API do GitHub
-echo Baixando o arquivo de versão mais recente... >> "%log_file%"
-powershell -command "(New-Object System.Net.WebClient).DownloadFile('%update_check_url%', '%latest_version_file%')" 2>> "%log_file%"
+:: Download the latest release information from GitHub
+powershell -command "(New-Object System.Net.WebClient).DownloadFile('%update_check_url%', '%latest_release_file%')" 2>> "%log_file%"
 if errorlevel 1 (
-    echo Erro ao baixar o arquivo de versão mais recente. >> "%log_file%"
-    echo Falha ao baixar o arquivo de versão mais recente.
+    echo Error downloading the latest release information. >> "%log_file%"
+    echo Failed to download the latest release information.
     pause
     exit /b 1
 )
 
-:: Ler a versão mais recente do JSON baixado
-call :get_json_value "%latest_version_file%" "tag_name"
+:: Get the latest version tag
+call :get_json_value "%latest_release_file%" "tag_name"
 set "latest_version=%value%"
 
-echo Versão atual: %current_version% >> "%log_file%"
-echo Versão mais recente: %latest_version% >> "%log_file%"
+:: Compare the latest version with the current version
+echo Current version: %current_version% >> "%log_file%"
+echo Latest version: %latest_version% >> "%log_file%"
 
 if "%current_version%" == "%latest_version%" (
-    echo Nenhuma atualização disponível. >> "%log_file%"
-    echo O script está na versão mais recente.
+    echo No update available. >> "%log_file%"
+    echo The script is up to date.
     exit /b
 ) else (
-    echo Nova versão disponível: %latest_version% >> "%log_file%"
-    echo Baixando a atualização... >> "%log_file%"
+    echo New version available: %latest_version% >> "%log_file%"
+    echo Downloading the update... >> "%log_file%"
     
-    :: Formatar URL de download
-    set "formatted_download_url=%download_url:{tag}=%latest_version%"
-    powershell -command "(New-Object System.Net.WebClient).DownloadFile('%formatted_download_url%', '%update_script_file%')" 2>> "%log_file%"
-    if errorlevel 1 (
-        echo Erro ao baixar o novo script. >> "%log_file%"
-        echo Falha ao baixar o novo script.
-        pause
-        exit /b 1
+    :: Create the downloads directory if it doesn't exist
+    if not exist "%downloads_dir%" mkdir "%downloads_dir%"
+
+    :: Loop through each asset in the release and download it
+    for /f "tokens=1,2 delims=," %%A in ('powershell -command "((Get-Content '%latest_release_file%' | ConvertFrom-Json).assets | ForEach-Object { $_.browser_download_url, $_.name })"') do (
+        set "download_url=%%A"
+        set "file_name=%%B"
+        echo Downloading %%B... >> "%log_file%"
+        powershell -command "(New-Object System.Net.WebClient).DownloadFile('!download_url!', '%downloads_dir%\!file_name!')" 2>> "%log_file%"
+        if errorlevel 1 (
+            echo Error downloading %%B. >> "%log_file%"
+            echo Failed to download %%B.
+        ) else (
+            echo %%B downloaded successfully. >> "%log_file%"
+        )
     )
-    
-    echo Atualização concluída. >> "%log_file%"
-    echo Novo script baixado e pronto para execução.
 )
 
-:: Atualizar e reiniciar
-echo Atualizando o script... >> "%log_file%"
-if exist "%update_script_file%" (
-    echo Executando o novo script de atualização. >> "%log_file%"
-    call "%update_script_file%"
+:: Update the current version in the config.json file
+powershell -command "(Get-Content '%config_file%') -replace '\"current_version\": \".*\"', '\"current_version\": \"%latest_version%\"' | Set-Content '%config_file%'" 2>> "%log_file%"
+if errorlevel 1 (
+    echo Error updating the current version in config.json. >> "%log_file%"
+    echo Failed to update the current version.
 ) else (
-    echo Falha ao atualizar o script. >> "%log_file%"
-    echo O script de atualização não foi encontrado.
+    echo Current version updated to %latest_version%. >> "%log_file%"
 )
 
+echo Update complete. >> "%log_file%"
 pause
