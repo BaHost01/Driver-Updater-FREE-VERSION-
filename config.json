@@ -1,0 +1,13 @@
+{
+  "update_check_url": "https://api.github.com/repos/usuario/repositorio/releases/latest",
+  "download_base_url": "https://github.com/usuario/repositorio/releases/download/{tag}/",
+  "current_version": "2.0.0",
+  "update_log_file": "update_log.txt",
+  "files_to_download":
+    "Menu.bat",
+    "documentation.txt"
+    ,]
+  "auto_update": true,
+  "download_directory": "downloads",
+  "backup_old_version": true
+}
