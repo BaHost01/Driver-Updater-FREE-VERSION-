@@ -5,7 +5,8 @@
   "update_log_file": "update_log.txt",
   "files_to_download":
     "Menu.bat",
-    "documentation.txt"
+    "documentation.txt",
+     "config.json",
   ,]
   "auto_update": true,
   "download_directory": "downloads",
