@@ -1,5 +1,5 @@
 {
-  "update_check_url": "https://api.github.com/repos/usuario/repositorio/releases/latest",
+  "update_check_url": "https://api.github.com/repos/BaHost01/Driver-Updater-FREE-VERSION-/releases/latest",
   "download_base_url": "https://github.com/BaHost01/Driver-Updater-FREE-VERSION-/releases/download/{tag}/",
   "current_version": "2.0.0",
   "update_log_file": "update_log.txt",
