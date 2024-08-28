@@ -6,7 +6,7 @@
   "files_to_download":
     "Menu.bat",
     "documentation.txt"
-    ,]
+  ,]
   "auto_update": true,
   "download_directory": "downloads",
   "backup_old_version": true
