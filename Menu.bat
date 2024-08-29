@@ -5,7 +5,7 @@ setlocal EnableDelayedExpansion
 set "debug_password=6711"
 
 :: Nome personalizado para o prompt de comando
-set "prompt_name=Main-Menu"
+set "prompt_name=DriverUpdater-Menu"
 prompt $p$g%prompt_name%$g
 
 :: Diretórios e arquivos utilizados
