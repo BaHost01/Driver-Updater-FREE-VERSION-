@@ -1,9 +1,22 @@
-Auto Update Script V2
-This project provides a batch script (Menu.bat) designed to automatically check for updates, download necessary files, and optionally run an update script. It offers robust features such as automatic backups, configurable download directories, and seamless integration with GitHub releases.
+# Auto Update Script V3.1
 
-Features
-Automatic Update Checking: The script checks for updates from a specified GitHub repository.
-Dynamic File Downloading: Downloads all files specified in the configuration file.
-Automatic Backup: Optionally backs up the current version before applying an update.
-Auto-Update Execution: Automatically runs the update script if enabled.
-Customizable Configuration: All key parameters are set via a config.json file.
+Este projeto fornece um script em lote (Menu.bat) projetado para verificar automaticamente atualizações, baixar arquivos necessários e executar opcionalmente um script de atualização. Ele oferece recursos robustos, como backups automáticos, diretórios de download configuráveis e integração perfeita com lançamentos do GitHub.
+
+## Features
+
+- **Verificação Automática de Atualizações**: O script verifica atualizações a partir de um repositório especificado no GitHub.
+- **Download Dinâmico de Arquivos**: Baixa todos os arquivos especificados no arquivo de configuração.
+- **Backup Automático**: Faz backup da versão atual antes de aplicar uma atualização, se habilitado.
+- **Execução Automática de Atualização**: Executa automaticamente o script de atualização se habilitado.
+- **Configuração Personalizável**: Todos os parâmetros principais são definidos via um arquivo `config.json`.
+
+## Instalação
+
+1. **Clone o repositório**:
+   ```bash
+   git clone https://github.com/SeuUsuario/SeuRepositório.git
+   cd SeuRepositório
+
+
+
+
