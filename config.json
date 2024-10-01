@@ -1,9 +1,14 @@
 {
-    "version": "3.0.0",
+    "version": "3.0.1",
     "update_url": "https://github.com/BaHost01/Driver-Updater-FREE-VERSION-/archive/main.zip",
     "backup_dir": "backups",
     "log_dir": "logs",
     "script_protection": true,
     "ui_mode": "dark",
-    "scheduled_background_update": true
+    "scheduled_background_update": true,
+    "max_retries": 3,
+    "timeout": 10,
+    "notifications_enabled": true,
+    "log_level": "info",
+    "auto_backup": true
 }
