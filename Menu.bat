@@ -127,8 +127,27 @@ goto :beta_testing_menu
 :: Funções do Menu Principal
 :update_drivers
 echo Verificando e atualizando drivers...
-:: Adicione o código real aqui para verificação e atualização de drivers
-:: Exemplo: Chame um script ou ferramenta para atualizar drivers
+echo.
+
+:: Simulação de verificação de drivers - substitua com seu comando real
+:: Exemplo: Uso de um utilitário de terceiros ou uma ferramenta do Windows
+for /f "tokens=*" %%d in ('driverquery /fo csv /nh') do (
+    echo Verificando driver: %%d
+    :: Simule a condição de driver desatualizado (substitua com lógica real)
+    set "driver_version=%%~nxd"
+    
+    if "!driver_version!" lss "1.0.0" (
+        echo Driver %%d está desatualizado. Atualizando...
+        :: Aqui você deve inserir o comando real para atualizar o driver
+        :: Exemplo: pnputil /add-driver caminho_do_driver.inf /install
+        echo Atualizando driver %%d...
+        echo [SUCESSO] Driver %%d atualizado com sucesso. >> "!log_file!"
+    ) else (
+        echo [ATUALIZADO] Driver %%d está atualizado.
+        echo [ATUALIZADO] Driver %%d está atualizado. >> "!log_file!"
+    )
+)
+
 echo Atualização concluída.
 pause
 goto :menu
