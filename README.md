@@ -14,7 +14,7 @@ Este projeto fornece um script em lote (Menu.bat) projetado para verificar autom
 
 1. **Clone o repositório**:
    ```bash
-   git clone https://github.com/SeuUsuario/SeuRepositório.git
+   git clone https://github.com/BaHost01/Driver-Updater-FREE-VERSION-.git
    cd SeuRepositório
 
 
