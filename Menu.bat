@@ -138,8 +138,35 @@ for /f "tokens=*" %%d in ('driverquery /fo csv /nh') do (
     
     if "!driver_version!" lss "1.0.0" (
         echo Driver %%d está desatualizado. Atualizando...
-        :: Aqui você deve inserir o comando real para atualizar o driver
-        :: Exemplo: pnputil /add-driver caminho_do_driver.inf /install
+        @echo off
+:: Script para atualizar drivers
+
+echo Atualizando drivers...
+echo.
+
+:: Defina o caminho do driver aqui
+set driver_path=C:\Drivers\caminho_do_driver.inf
+
+:: Verifica se o arquivo .inf existe no caminho especificado
+if exist "%driver_path%" (
+    echo O driver foi encontrado no caminho: %driver_path%
+    echo Instalando driver...
+    
+    :: Comando para atualizar o driver usando pnputil
+    pnputil /add-driver "%driver_path%" /install
+
+    if %errorlevel% equ 0 (
+        echo Driver atualizado com sucesso!
+    ) else (
+        echo Falha ao atualizar o driver. Código de erro: %errorlevel%
+    )
+) else (
+    echo O arquivo de driver .inf nao foi encontrado. Verifique o caminho.
+)
+
+echo.
+pause
+
         echo Atualizando driver %%d...
         echo [SUCESSO] Driver %%d atualizado com sucesso. >> "!log_file!"
     ) else (
